@@ -1,0 +1,22 @@
+
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.login-form {
+  min-width: 400px;
+  text-align: center;
+  align-content: center;
+}
+
+.login-form-button {
+  width: 100%;
+}
+
+.login-titulo {
+  width: 100%;
+  font-size: 22pt;
+  margin-bottom: 10px;
+}
