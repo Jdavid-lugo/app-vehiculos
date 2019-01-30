@@ -23,7 +23,7 @@
 
     switch ($accion) {
         case 'consulta':
-            $carros = pg_query($cnx,'select * from cars') or die('fallo');
+            $carros = pg_query($cnx,'select * from cars order by 5') or die('fallo');
             $i=0;
             $cars=pg_fetch_all($carros);
             $status=200;
@@ -54,12 +54,12 @@
             $cars='';
             break;
         case 'modificar':
-            $id=$_GET['id'];
-            $brand=$_GET['Marca'];
-            $model=$_GET['Modelo'];
-            $year=$_GET['Fecha'];
-            $madein=$_GET['Pais'];
-            $maxspeed=$_GET['MaximaVelocidad'];
+            $id=$_POST['id'];
+            $brand=$_POST['Marca'];
+            $model=$_POST['Modelo'];
+            $year=$_POST['Fecha'];
+            $madein=$_POST['Pais'];
+            $maxspeed=$_POST['MaximaVelocidad'];
             $sql="update cars set brand='$brand',model='$model',year='$year',made_in='$madein',max_speed=$maxspeed where id=$id";
             $carros = pg_query($cnx,$sql) or die(json_encode($data));
             $cars='';
