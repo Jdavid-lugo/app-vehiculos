@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import { Modal, Button,Icon,Form,Input,DatePicker } from 'antd';
+import { Modal, Button,Icon,Form,Input,InputNumber,message } from 'antd';
+import reqwest from 'reqwest';
 
-class ModalModificar extends Component {
+
+
+class CarroNuevoModal extends Component {
 
   constructor(props){
     super(props);
@@ -9,18 +12,11 @@ class ModalModificar extends Component {
       ModalText: 'Modificar Carro',
       visible: false,
       confirmLoading: false,
-      props2:props.datos
     };
 
   }
 
   showModal = () => {
-    console.log(this.state.props2);
-    const datos=this.state.props2;
-    this.props.form.setFieldsValue({
-      Marca: datos.brand,Modelo:datos.model,
-      Pais:datos.madein,MaximaVelocidad:datos.maxspeed
-    });
 
     this.setState({
       visible: true,
@@ -28,21 +24,48 @@ class ModalModificar extends Component {
 
   }
 
-  handleOk = () => {
-    this.setState({
+
+  fetch = (params = {}) => {
+    this.setState({ 
       ModalText: 'Guardando',
-      confirmLoading: true,
+      confirmLoading: true
     });
-    setTimeout(() => {
+    
+
+    reqwest({
+      url: 'http://localhost/apiCar.php',
+      method: 'post',
+      data: {
+        accion:'insertar',
+        ...params
+      },
+      type: 'json'
+    }).then((data) => {
+
       this.setState({
         visible: false,
         confirmLoading: false,
       });
-    }, 2000);
+
+      if(data.status === 200){
+        message.success('Se inserto correctamente');
+        this.props.actualizarTabla();
+      }else{
+        message.error('No se inserto el elemento');
+
+      }
+    });
+  }
+
+
+  handleOk = (e) => {
+    e.preventDefault();
+    let params = this.props.form.getFieldsValue();
+    this.fetch(params);
+
   }
 
   handleCancel = () => {
-    //console.log('Clicked cancel button');
     this.setState({
       visible: false,
     });
@@ -55,22 +78,21 @@ class ModalModificar extends Component {
 
     return (
       <span>
-        <a onClick={this.showModal}>
-          <Icon type='edit' /> 
-        </a>
+        <span className='App-link' onClick ={this.showModal}>
+          Agregar Nuevo<Icon className=''  type='plus' />
+        </span>
         <Modal
-          title={ModalText}
+          title={ModalText} 
           visible={visible}
           onOk={this.handleOk}
           confirmLoading={confirmLoading}
           onCancel={this.handleCancel}
           footer={[
-            <Button key="back" onClick={this.handleCancel}>Return</Button>,
-            <Button key="submit" type="primary" loading={confirmLoading} onClick={this.handleOk}>
-              Submit
+            <Button key="back" onClick={this.handleCancel}>Volver</Button>,
+            <Button key="submit_" type="primary" loading={confirmLoading} onClick={this.handleOk}>
+              Guardar
             </Button>,
-          ]}
-        >
+          ]}>
            <Form onSubmit={this.handleSubmit} className="login-form" >
             <Form.Item>
               {getFieldDecorator('Marca', {
@@ -90,7 +112,7 @@ class ModalModificar extends Component {
               {getFieldDecorator('Fecha', {
                 rules: [{ required: true, message: 'Ingresar Fecha!' }],
               })(
-                <DatePicker className='datePicker__' />
+                <InputNumber min={1900} max={2030}  placeholder="Año de Fabricación" className="login-form-button"/>
               )}
             </Form.Item>
             <Form.Item>
@@ -104,13 +126,15 @@ class ModalModificar extends Component {
               {getFieldDecorator('MaximaVelocidad', {
                 rules: [{ required: true, message: 'Ingresar maxima velocidad!' }],
               })(
-                <Input type="number" placeholder="Maxima velocidad" />
+                <InputNumber min={1} max={500}  placeholder="Velocidad Maxima" className="login-form-button"/>
+
               )}
             </Form.Item>
           </Form>
         </Modal>
       </span>
+
     );
   }
 }
-export default Form.create({ name: 'modificar' })(ModalModificar);
+export default Form.create({ name: 'nuevo' })(CarroNuevoModal);

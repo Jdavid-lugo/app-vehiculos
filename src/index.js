@@ -5,7 +5,7 @@ import Login from './Login';
 import App from './App';
 import Main from './Main';
 import Cars from './Cars';
-import CarroNuevo from './CarroNuevo';
+
 //import * as serviceWorker from './serviceWorker';
 import './index.css';
 
@@ -17,7 +17,6 @@ const Ruta = () => (
       <Route path="/login" component={Login} exact /> 
       <Route path="/main" component={Main} exact /> 
       <Route path="/carros" component={Cars} exact /> 
-      <Route path="/carroNuevo" component={CarroNuevo} exact /> 
      
     </Switch>
   </HashRouter>

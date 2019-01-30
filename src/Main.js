@@ -17,7 +17,7 @@ class Main extends Component {
           <Navbar auth={auth} />
           <header className="App-header">
             <p>
-              Pagina principal con opcioens de menu.
+              Pagina principal puede contener informacion de interes.
             </p>
             <Link className="App-link" to="/login"  rel="noopener noreferrer">
               Cerrar Sesión

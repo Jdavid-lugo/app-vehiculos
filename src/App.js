@@ -7,14 +7,10 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
+          <p className='title'>
+            Hola Bienvenido.
           </p>
-          <Link
-            className="App-link"
-            to="/login"
-            rel="noopener noreferrer"
-          >
+          <Link className="App-link" to="/login" rel="noopener noreferrer">
             Inicio de Sesion
           </Link>
         </header>

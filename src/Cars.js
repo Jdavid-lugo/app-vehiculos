@@ -8,6 +8,7 @@ import "antd/dist/antd.css";
 import Navbar from "./Navbar";
 import Manager from "./Manager";
 
+
 const { Content} = Layout;
 
 class Cars extends Component {
@@ -18,8 +19,8 @@ class Cars extends Component {
   }
   render() {
     const auth =this.state.auth;
-    if(true){
-    //if(auth){
+    //if(true){
+    if(auth){
       return (
           <Layout>
             <div className="App">
@@ -28,17 +29,10 @@ class Cars extends Component {
             <Content className='App-content'>
               <Row>
                 <Col span={18} offset={3}>
-                  <Manager/>
+                  <Manager auth={auth}/><br></br>
                 </Col>
               </Row>
-              <Row>
-                <Col span={6}>
-                  <Link className="App-link" to={{pathname:"/main",auth:auth}} >Volver</Link>
-                </Col>
-                <Col span={6} offset={10}>
-                  <Link className="App-link" to={{pathname:"/carroNuevo",auth:auth}} ><Icon type='plus'/> Añadir Carro</Link>
-                </Col>
-              </Row>
+              <Row></Row>
             </Content>
           </Layout>
       );
