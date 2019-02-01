@@ -6,11 +6,12 @@
     header('P3P: CP="IDC DSP COR CURa ADMa OUR IND PHY ONL COM STA"');
 
     
-        
-    $accion = $_GET['accion'];
-    //file_put_contents('accion.txt', print_r($accion,1));
+    ini_set('display_errors', '0');
+
+    $accion = $_GET['accion'] ==''?$_POST['accion']:$_GET['accion'];
+    //file_put_contents('accion.txt', print_r($_GET,1));
     //$accion = $_POST['accion'];
-    
+
     $h = "tantor.db.elephantsql.com";
     $u = "qaxjybpk";
     $p = "HazV2hg7txf1jULL1Io-owGCh6n509pd";
@@ -18,6 +19,7 @@
     $port="5432";
     $strCnx = "host=$h port=$port dbname=$db user=$u password=$p";
     $cnx = pg_connect($strCnx) or die ("Error de conexion. ". pg_last_error());
+    $data =['status' => '502', 'cars' => ''];
 
     switch ($accion) {
         case 'consulta':
@@ -38,40 +40,42 @@
             $status = 200;
             break;
         case 'insertar':
-            $id=$_GET['id'];
-            $brand=$_GET['brand'];
-            $model=$_GET['model'];
-            $year=$_GET['year'];
-            $madein=$_GET['madein'];
-            $maxspeed=$_GET['maxspeed'];
-            $sql="insert into cars (id,brand,model,year,made_in,max_speed)
-                      VALUES($id,$brand,$model,$year,$madein,$maxspeed)";
-            $carros = pg_query($cnx,$sql);
+            $brand=$_POST['Marca'];
+            $model=$_POST['Modelo'];
+            $year=$_POST['Fecha'];
+            $madein=$_POST['Pais'];
+            $maxspeed=$_POST['MaximaVelocidad'];
+            $sql="insert into cars (brand,model,year,made_in,max_speed)
+                VALUES('$brand','$model','$year','$madein',$maxspeed);";
+            file_put_contents('accion.txt', print_r($sql,1));
+            $carros = pg_query($cnx,$sql) or die(json_encode($data));
             $i=0;
             $status=200;
             $cars='';
             break;
         case 'modificar':
             $id=$_GET['id'];
-            $brand=$_GET['brand'];
-            $model=$_GET['model'];
-            $year=$_GET['year'];
-            $madein=$_GET['madein'];
-            $maxspeed=$_GET['maxspeed'];
-            $sql="update cars set brand=$brand,model=$model,year=$year,made_in=$madein,max_speed=$maxspeed where id=$id";
-            $carros = pg_query($cnx,$sql);
+            $brand=$_GET['Marca'];
+            $model=$_GET['Modelo'];
+            $year=$_GET['Fecha'];
+            $madein=$_GET['Pais'];
+            $maxspeed=$_GET['MaximaVelocidad'];
+            $sql="update cars set brand='$brand',model='$model',year='$year',made_in='$madein',max_speed=$maxspeed where id=$id";
+            $carros = pg_query($cnx,$sql) or die(json_encode($data));
             $cars='';
             $status=200;
             break;
 
         case 'eliminar':
             $id=$_GET['id'];
-            $brand=$_GET['brand'];
-            $model=$_GET['model'];
-            $year=$_GET['year'];
-            $madein=$_GET['madein'];
-            $maxspeed=$_GET['maxspeed'];
             $sql="update cars set active=false where id=$id";
+            $carros = pg_query($cnx,$sql);
+            $cars='';
+            $status=200;
+            break;
+        case 'habilitar':
+            $id=$_GET['id'];
+            $sql="update cars set active=true where id=$id";
             $carros = pg_query($cnx,$sql);
             $cars='';
             $status=200;
